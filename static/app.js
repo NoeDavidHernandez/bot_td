@@ -17,6 +17,19 @@ async function toggleBot() {
     }
 }
 
+async function togglePar(par) {
+    try {
+        await fetch('/api/toggle_par', { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ par: par })
+        });
+        fetchStats();
+    } catch (e) {
+        console.error("Error toggling par", e);
+    }
+}
+
 function processChartData(historial, timeframe) {
     const groups = {};
     
@@ -179,6 +192,9 @@ function updateDashboard(data) {
         let badgeClass = 'pos-none';
         let badgeText = 'Buscando Señal';
         let pnlHtml = '';
+        
+        // Obtener si el par está activo en la config del bot
+        const par_activo = data.control.pares_activos && data.control.pares_activos[par] !== false;
 
         if (pos.abierta) {
             badgeClass = pos.direccion === 'long' ? 'pos-long' : 'pos-short';
@@ -202,7 +218,10 @@ function updateDashboard(data) {
 
         card.innerHTML = `
             <div class="market-header">
-                <h3>${par}</h3>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <h3>${par}</h3>
+                    <button class="par-toggle ${par_activo ? 'active' : ''}" onclick="togglePar('${par}')">${par_activo ? 'ON' : 'OFF'}</button>
+                </div>
                 <span class="pos-badge ${badgeClass}">${badgeText}</span>
             </div>
             <div class="market-data">

@@ -17,7 +17,7 @@ TELEGRAM_TOKEN   = os.getenv("TELEGRAM_TOKEN", "")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "")
 
 # ── Pares a operar ────────────────────────────────────
-PARES = ["BTC/USDT", "ETH/USDT","SOL/USDT","XRP/USDT"]   # Agregar más pares aquí si se desea
+PARES = ["BTC/USDT", "ETH/USDT", "SOL/USDT", "XRP/USDT", "BNB/USDT", "DOGE/USDT", "ADA/USDT", "AVAX/USDT"]
 
 # ── Capital ───────────────────────────────────────────
 SALDO_TOTAL          = 100.0   # Saldo ficticio inicial
@@ -37,8 +37,8 @@ EMA_LENTA        = 21
 RSI_PERIODO      = 14
 ATR_PERIODO      = 14
 ADX_PERIODO      = 14     # Periodo del ADX
-ADX_MIN          = 25     # Umbral de tendencia fuerte
-VOLUMEN_MULT_MIN = 1.2    # Volumen > 1.2x del promedio para entrar
+ADX_MIN          = 20     # Umbral moderado: captura inicios de tendencia
+VOLUMEN_MULT_MIN = 1.0    # Volumen promedio (1.0x) para entrar
 RSI_MAX_LONG     = 65      # No entrar long si RSI >= este valor
 RSI_MIN_SHORT    = 35      # No entrar short si RSI <= este valor
 

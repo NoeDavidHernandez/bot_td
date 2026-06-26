@@ -152,6 +152,7 @@ def procesar_par(par: str, vela_5m, vela_actual, vela_previa):
     """Punto de entrada principal — llamado en cada ciclo del loop para cada par."""
     with stats.lock:
         bot_activo = stats.control["bot_activo"]
+        par_activo = stats.control.get("pares_activos", {}).get(par, True)
         modo       = stats.control["modo"]
         pos        = dict(stats.posiciones[par])
         saldo      = stats.sesion["saldo"]
@@ -167,7 +168,7 @@ def procesar_par(par: str, vela_5m, vela_actual, vela_previa):
 
     monto_total = saldo * config.PORCENTAJE_POR_TRADE
 
-    if not pos["abierta"] and bot_activo:
+    if not pos["abierta"] and bot_activo and par_activo:
         _intentar_entrada(par, modo, monto_total,
                           vela_5m, vela_actual, vela_previa, precio, rsi)
     elif pos["abierta"]:

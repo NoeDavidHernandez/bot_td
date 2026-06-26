@@ -15,6 +15,7 @@ lock = threading.Lock()
 control = {
     "bot_activo": False,
     "modo":       "ambos",   # "ambos" | "long" | "short"
+    "pares_activos": { par: True for par in config.PARES }
 }
 
 # ── Estado por par (se inicializa dinámicamente) ──────

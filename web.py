@@ -24,6 +24,19 @@ def get_stats():
             "historial": stats.historial_operaciones
         }
 
+from pydantic import BaseModel
+
+class ToggleParReq(BaseModel):
+    par: str
+
+@app.post("/api/toggle_par")
+def toggle_par(req: ToggleParReq):
+    with stats.lock:
+        if req.par in stats.control.get("pares_activos", {}):
+            stats.control["pares_activos"][req.par] = not stats.control["pares_activos"][req.par]
+            return {"status": "success", "par": req.par, "activo": stats.control["pares_activos"][req.par]}
+        return {"status": "error", "msg": "Par no encontrado"}
+
 @app.post("/api/toggle")
 def toggle_bot():
     with stats.lock:

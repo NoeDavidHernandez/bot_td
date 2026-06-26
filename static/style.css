@@ -227,3 +227,23 @@ header {
 }
 .pnl-value.green { color: var(--success); }
 .pnl-value.red { color: var(--danger); }
+
+.par-toggle {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text-muted);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.par-toggle.active {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--success);
+    border-color: rgba(16, 185, 129, 0.3);
+}
+.par-toggle:hover {
+    filter: brightness(1.2);
+}
