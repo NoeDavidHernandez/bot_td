@@ -21,7 +21,9 @@ def get_stats():
             "control": stats.control,
             "sesion": stats.sesion,
             "posiciones": stats.posiciones,
-            "historial": stats.historial_operaciones
+            "historial": stats.historial_operaciones,
+            "logs_entradas": stats.logs_entradas,
+            "logs_generales": stats.logs_generales
         }
 
 from pydantic import BaseModel

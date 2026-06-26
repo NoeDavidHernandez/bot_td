@@ -14,7 +14,8 @@ ultimo_update_id = 0
 
 # ── Envío ─────────────────────────────────────────────
 
-def enviar(mensaje: str):
+def enviar(mensaje: str, tipo: str = "general"):
+    stats.agregar_log(mensaje, tipo)
     try:
         url  = f"https://api.telegram.org/bot{config.TELEGRAM_TOKEN}/sendMessage"
         data = {"chat_id": config.TELEGRAM_CHAT_ID, "text": mensaje}
@@ -43,7 +44,8 @@ def notificar_entrada(par: str, direccion: str, precio: float,
         f"📊 RSI: {rsi:.2f} | Vol: {vol_ratio:.2f}x\n"
         f"📈 ADX: {adx:.1f} ({adx_label})\n"
         f"✅ 5m+3m+Vol+ADX OK\n"
-        f"🕐 {datetime.now().strftime('%H:%M:%S')}"
+        f"🕐 {datetime.now().strftime('%H:%M:%S')}",
+        tipo="entrada"
     )
 
 

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Futures Bot Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -67,8 +67,24 @@
         <div class="markets-grid" id="markets-container">
             <!-- Las tarjetas de mercado se inyectan por JS -->
         </div>
+        <h2 class="section-title">Registro de Sistema (Logs)</h2>
+        <div class="dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); margin-bottom: 2rem;">
+            <div class="glass-card">
+                <h3>Últimas Entradas (Señales)</h3>
+                <div id="logs-entradas" class="log-container">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+            <div class="glass-card">
+                <h3>Logs Generales</h3>
+                <div id="logs-generales" class="log-container">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <script src="app.js"></script>
+    <script src="app.js?v=3"></script>
 </body>
 </html>

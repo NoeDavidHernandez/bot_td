@@ -261,6 +261,37 @@ function updateDashboard(data) {
             winRateChart.update();
         }
     }
+
+    // Renderizar Logs
+    function renderLogs(containerId, logs) {
+        const container = document.getElementById(containerId);
+        if (!logs || logs.length === 0) {
+            container.innerHTML = '<div style="text-align:center; padding: 2rem 0; opacity: 0.5;">Sin registros aún...</div>';
+            return;
+        }
+
+        let html = '';
+        logs.forEach(log => {
+            const timeStr = new Date(log.timestamp * 1000).toLocaleTimeString();
+            const msgHtml = log.mensaje.replace(/\n/g, '<br>');
+            html += `
+                <div class="log-entry">
+                    <span class="log-time">[${timeStr}]</span>
+                    <span>${msgHtml}</span>
+                </div>
+            `;
+        });
+        
+        // Solo actualizar si el contenido cambió para no arruinar el scroll si el usuario está leyendo
+        if (container.dataset.lastCount !== logs.length.toString()) {
+            container.innerHTML = html;
+            container.scrollTop = container.scrollHeight; // Auto-scroll al fondo
+            container.dataset.lastCount = logs.length.toString();
+        }
+    }
+
+    renderLogs('logs-entradas', data.logs_entradas);
+    renderLogs('logs-generales', data.logs_generales);
 }
 
 async function fetchStats() {

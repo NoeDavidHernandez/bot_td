@@ -69,6 +69,22 @@ sesion = {
 historial_operaciones = []
 ultimo_reporte = time.time()
 
+logs_entradas = []
+logs_generales = []
+
+def agregar_log(mensaje: str, tipo: str = "general"):
+    """Agrega un log en memoria y mantiene el límite de 50 elementos."""
+    log_obj = {"timestamp": time.time(), "mensaje": mensaje}
+    with lock:
+        if tipo == "entrada":
+            logs_entradas.append(log_obj)
+            if len(logs_entradas) > 50:
+                logs_entradas.pop(0)
+        else:
+            logs_generales.append(log_obj)
+            if len(logs_generales) > 50:
+                logs_generales.pop(0)
+
 
 # ── Helpers de lectura ────────────────────────────────
 
