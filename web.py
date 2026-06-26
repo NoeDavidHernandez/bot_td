@@ -41,9 +41,18 @@ def toggle_par(req: ToggleParReq):
 
 @app.post("/api/toggle")
 def toggle_bot():
+    import telegram as tg
     with stats.lock:
         stats.control["bot_activo"] = not stats.control["bot_activo"]
-        return {"status": "success", "bot_activo": stats.control["bot_activo"]}
+        activo = stats.control["bot_activo"]
+        if activo:
+            stats.control["modo"] = "ambos"
+            
+    # Notificar a telegram (y por ende, a los logs de la web)
+    estado_txt = "✅ BOT ACTIVADO (Desde la Web)" if activo else "⏸ BOT PAUSADO (Desde la Web)"
+    tg.enviar(estado_txt)
+    
+    return {"status": "success", "bot_activo": activo}
 
 # Asegurar que el directorio static exista
 if not os.path.exists("static"):
