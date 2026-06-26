@@ -14,6 +14,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+import config
+
 @app.get("/api/stats")
 def get_stats():
     with stats.lock:
@@ -23,8 +25,22 @@ def get_stats():
             "posiciones": stats.posiciones,
             "historial": stats.historial_operaciones,
             "logs_entradas": stats.logs_entradas,
-            "logs_generales": stats.logs_generales
+            "logs_generales": stats.logs_generales,
+            "apalancamiento": config.APALANCAMIENTO
         }
+
+from pydantic import BaseModel
+
+class ClosePositionReq(BaseModel):
+    par: str
+
+@app.post("/api/close_position")
+def close_position(req: ClosePositionReq):
+    with stats.lock:
+        if req.par in stats.posiciones and stats.posiciones[req.par]["abierta"]:
+            stats.posiciones[req.par]["forzar_cierre"] = True
+            return {"status": "success", "msg": f"Cierre manual programado para {req.par}"}
+        return {"status": "error", "msg": "Posición no encontrada o ya está cerrada"}
 
 from pydantic import BaseModel
 

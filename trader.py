@@ -93,6 +93,9 @@ def _evaluar_tp_parcial(cliente, par: str, pos: dict, precio: float, monto_total
 
 
 def _debe_cerrar(pos: dict, precio: float, vela_actual) -> tuple[bool, str]:
+    if pos.get("forzar_cierre", False):
+        return True, "🔘 CIERRE MANUAL"
+        
     tiempo_en_pos = time.time() - pos["tiempo_entrada"]
 
     if pos["direccion"] == "long":
@@ -174,6 +177,7 @@ def _intentar_entrada(cliente, par: str, modo: str, monto: float,
                         "tp_parcial_ok":  False,
                         "monto_restante": 1.0,
                         "cantidad_monedas": cantidad_ejecutada,
+                        "forzar_cierre": False,
                     })
                 tg.notificar_entrada(par, "long", precio, monto, sl, tp, rsi, vol_ratio, vela_actual["adx"])
             return
@@ -205,6 +209,7 @@ def _intentar_entrada(cliente, par: str, modo: str, monto: float,
                         "tp_parcial_ok":  False,
                         "monto_restante": 1.0,
                         "cantidad_monedas": cantidad_ejecutada,
+                        "forzar_cierre": False,
                     })
                 tg.notificar_entrada(par, "short", precio, monto, sl, tp, rsi, vol_ratio, vela_actual["adx"])
         elif strategy.hay_cruce_potencial_short(vela_actual, vela_previa):
@@ -255,6 +260,7 @@ def _gestionar_posicion(cliente, par: str, pos: dict, monto_total: float,
             "tp_parcial_ok":  False,
             "monto_restante": 1.0,
             "cantidad_monedas": 0.0,
+            "forzar_cierre": False,
         })
         stats.registrar_cierre(par, resultado_neto, pos["direccion"])
         racha = stats.sesion["racha_actual"]

@@ -30,6 +30,20 @@ async function togglePar(par) {
     }
 }
 
+async function closePosition(par) {
+    if(!confirm(`¿Estás seguro de cerrar manualmente la posición en ${par} a precio de mercado?`)) return;
+    try {
+        await fetch('/api/close_position', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ par: par })
+        });
+        fetchStats();
+    } catch (e) {
+        console.error("Error closing position", e);
+    }
+}
+
 function processChartData(historial, timeframe) {
     const groups = {};
     
@@ -158,6 +172,10 @@ function updateDashboard(data) {
         botStatus.className = 'status-badge offline';
     }
 
+    if (data.apalancamiento) {
+        document.getElementById('leverage-display').textContent = `x${data.apalancamiento}`;
+    }
+
     // Actualizar Tarjetas Principales
     document.getElementById('saldo-total').textContent = formatMoney(data.sesion.saldo);
     
@@ -209,9 +227,12 @@ function updateDashboard(data) {
 
             const pnlColorClass = pnlPct >= 0 ? 'green' : 'red';
             pnlHtml = `
-                <div class="market-pnl">
-                    <span class="data-label">PnL Estimado</span>
-                    <span class="pnl-value ${pnlColorClass}">${pnlPct >= 0 ? '+' : ''}${pnlPct.toFixed(2)}%</span>
+                <div class="market-pnl" style="display: flex; justify-content: space-between; align-items: center; padding-top: 10px; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.05);">
+                    <div>
+                        <span class="data-label">PnL Estimado</span>
+                        <span class="pnl-value ${pnlColorClass}">${pnlPct >= 0 ? '+' : ''}${pnlPct.toFixed(2)}%</span>
+                    </div>
+                    <button style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #ef4444; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; font-family: 'Inter', sans-serif; font-weight: bold;" onclick="closePosition('${par}')">Cerrar Posición</button>
                 </div>
             `;
         }
