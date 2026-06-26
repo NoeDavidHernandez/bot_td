@@ -1,0 +1,7 @@
+ccxt==4.4.29
+pandas==2.2.3
+pandas-ta==0.3.14b0
+python-telegram-bot==21.6
+python-dotenv==1.0.1
+fastapi==0.115.4
+uvicorn==0.32.0

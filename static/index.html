@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Futures Bot Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="background-glow"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="pulse-dot" id="status-dot"></div>
+                <h1>Futures Bot <span class="version">v4</span></h1>
+            </div>
+            <button class="status-badge" id="bot-status" onclick="toggleBot()">CARGANDO...</button>
+        </header>
+
+        <div class="dashboard-grid">
+            <!-- Tarjeta Saldo -->
+            <div class="glass-card stat-card">
+                <h3>Saldo Actual</h3>
+                <h2 id="saldo-total">$0.00</h2>
+                <div class="stat-footer">
+                    <span id="rentabilidad" class="badge">0.00%</span>
+                </div>
+            </div>
+
+            <!-- Tarjeta Win Rate -->
+            <div class="glass-card stat-card">
+                <h3>Win Rate</h3>
+                <h2 id="win-rate">0.0%</h2>
+                <div class="stat-footer">
+                    <span>Ops Totales: <strong id="ops-totales">0</strong></span>
+                </div>
+            </div>
+
+            <!-- Tarjeta PnL Total -->
+            <div class="glass-card stat-card">
+                <h3>PnL Sesión</h3>
+                <h2 id="pnl-total">$0.00</h2>
+                <div class="stat-footer">
+                    <span>Racha: <strong id="racha">0</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-section glass-card" style="margin-bottom: 3rem;">
+            <div class="chart-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem;">Win Rate (Rendimiento)</h3>
+                <select id="chart-timeframe" style="background: rgba(0,0,0,0.2); border: 1px solid var(--border); color: var(--text-main); padding: 0.5rem; border-radius: 8px; outline: none; font-family: inherit;">
+                    <option value="daily">Diario</option>
+                    <option value="weekly">Semanal</option>
+                    <option value="monthly">Mensual</option>
+                </select>
+            </div>
+            <div style="height: 300px; width: 100%;">
+                <canvas id="winRateChart"></canvas>
+            </div>
+        </div>
+
+        <h2 class="section-title">Mercados en Tiempo Real</h2>
+        <div class="markets-grid" id="markets-container">
+            <!-- Las tarjetas de mercado se inyectan por JS -->
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
