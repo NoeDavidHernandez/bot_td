@@ -77,6 +77,19 @@ def main():
     cliente = exchange.conectar()
     if not cliente:
         return
+        
+    # Obtener el saldo real de USDT
+    try:
+        balance_data = cliente.fetch_balance()
+        if "USDT" in balance_data:
+            saldo_real = float(balance_data["USDT"]["total"])
+            with stats.lock:
+                stats.sesion["saldo"] = saldo_real
+                stats.sesion["saldo_inicial"] = saldo_real
+            config.SALDO_TOTAL = saldo_real
+            print(f"💰 Saldo real detectado en Binance: ${saldo_real:.2f} USDT")
+    except Exception as e:
+        print(f"⚠️ No se pudo obtener el saldo real: {e}. Usando ficticio.")
 
     # 2. Iniciar thread de Telegram
     tg.iniciar_polling()
