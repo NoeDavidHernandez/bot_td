@@ -98,3 +98,74 @@ def obtener_datos_par(exchange, simbolo: str) -> tuple | None:
         df_señal.iloc[-1],       # Vela actual en 3m
         df_señal.iloc[-2],       # Vela previa en 3m (para detectar cruce)
     )
+
+
+# ── Ejecución de Órdenes Reales ───────────────────────
+
+def configurar_mercado(exchange, simbolo: str):
+    """Establece margen aislado y el apalancamiento para el par."""
+    try:
+        # ccxt requiere que los mercados estén cargados para formatear
+        exchange.load_markets()
+        try:
+            exchange.set_margin_mode('isolated', simbolo)
+        except Exception as e:
+            # A veces ya está en aislado y tira error, lo ignoramos o imprimimos advertencia
+            if 'Margin type already set' not in str(e):
+                print(f"⚠️ Nota de margen para {simbolo}: {e}")
+                
+        exchange.set_leverage(config.APALANCAMIENTO, simbolo)
+        print(f"⚙️ {simbolo} configurado a {config.APALANCAMIENTO}x (Aislado)")
+    except Exception as e:
+        print(f"❌ Error configurando mercado {simbolo}: {e}")
+
+
+def abrir_posicion(exchange, simbolo: str, direccion: str, monto_usdt: float, precio_actual: float) -> float:
+    """
+    Calcula la cantidad exacta y lanza orden de Market (Long o Short).
+    Retorna la cantidad exacta ejecutada, o 0.0 si falla.
+    """
+    try:
+        # Calcular cantidad base a comprar
+        cantidad_bruta = (monto_usdt * config.APALANCAMIENTO) / precio_actual
+        
+        # Ajustar a la precisión permitida por Binance
+        mercado = exchange.market(simbolo)
+        cantidad_formateada = exchange.amount_to_precision(simbolo, cantidad_bruta)
+        cantidad = float(cantidad_formateada)
+
+        if cantidad <= 0:
+            print(f"❌ Cantidad {cantidad} es demasiado pequeña para {simbolo}")
+            return 0.0
+
+        side = "buy" if direccion == "long" else "sell"
+        
+        print(f"🚀 Ejecutando {side.upper()} MARKET en {simbolo} | Cantidad: {cantidad}")
+        order = exchange.create_market_order(simbolo, side, cantidad)
+        return cantidad
+    except Exception as e:
+        print(f"❌ Error crítico abriendo posición real en {simbolo}: {e}")
+        return 0.0
+
+
+def cerrar_posicion(exchange, simbolo: str, direccion_original: str, cantidad: float) -> bool:
+    """
+    Lanza una orden opuesta para cerrar la posición actual.
+    """
+    try:
+        if cantidad <= 0:
+            return False
+            
+        # Para cerrar un LONG hacemos SELL, para cerrar un SHORT hacemos BUY
+        side = "sell" if direccion_original == "long" else "buy"
+        
+        # Ajustar por si acaso, aunque ya debería venir de la orden de entrada
+        cantidad_formateada = exchange.amount_to_precision(simbolo, cantidad)
+        cantidad = float(cantidad_formateada)
+        
+        print(f"🛡️ Ejecutando Cierre ({side.upper()} MARKET) en {simbolo} | Cantidad: {cantidad}")
+        exchange.create_market_order(simbolo, side, cantidad)
+        return True
+    except Exception as e:
+        print(f"❌ Error crítico cerrando posición real en {simbolo}: {e}")
+        return False

@@ -29,6 +29,7 @@ def _posicion_vacia():
         "tiempo_entrada":    0.0,
         "tp_parcial_ok":     False,  # True cuando ya se ejecutó el TP parcial
         "monto_restante":    1.0,    # Fracción del monto aún en juego (1.0 = 100%)
+        "cantidad_monedas":  0.0,
         "ultimo_precio":     0.0,
         "ultimo_rsi":      0.0,
         "tend_5m":         "─",

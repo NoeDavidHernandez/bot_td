@@ -57,7 +57,7 @@ def loop_principal(cliente):
             if datos is None:
                 continue
             vela_5m, vela_actual, vela_previa = datos
-            trader.procesar_par(par, vela_5m, vela_actual, vela_previa)
+            trader.procesar_par(cliente, par, vela_5m, vela_actual, vela_previa)
 
         _panel_consola(cliente)
 
@@ -77,6 +77,11 @@ def main():
     cliente = exchange.conectar()
     if not cliente:
         return
+        
+    # Configurar apalancamiento y margen aislado en Binance
+    print("\n⚙️ Configurando mercados en Binance...")
+    for par in config.PARES:
+        exchange.configurar_mercado(cliente, par)
         
     # Obtener el saldo real de USDT
     try:
