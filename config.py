@@ -36,11 +36,11 @@ EMA_RAPIDA       = 9
 EMA_LENTA        = 21
 RSI_PERIODO      = 14
 ATR_PERIODO      = 14
-ADX_PERIODO      = 14     # Periodo del ADX
-ADX_MIN          = 20     # Umbral moderado: captura inicios de tendencia
-VOLUMEN_MULT_MIN = 1.0    # Volumen promedio (1.0x) para entrar
-RSI_MAX_LONG     = 65      # No entrar long si RSI >= este valor
-RSI_MIN_SHORT    = 35      # No entrar short si RSI <= este valor
+ADX_PERIODO      = 14
+ADX_MIN          = 15     # Umbral relajado: evita solo mercados totalmente planos
+VOLUMEN_MULT_MIN = 0.8    # Permitir 80% del volumen promedio
+RSI_MAX_LONG     = 70      # Más holgura en momentum alcista
+RSI_MIN_SHORT    = 30      # Más holgura en momentum bajista
 
 # ── Gestión de tiempo ─────────────────────────────────
 # ── Take Profit parcial ──────────────────────────────
