@@ -120,8 +120,8 @@ def registrar_cierre(par: str, resultado_neto: float, direccion: str):
     historial_operaciones.append({
         "timestamp": time.time(),
         "par": par,
-        "ganancia": resultado_neto,
-        "ganadora": resultado_neto >= 0,
+        "ganancia": float(resultado_neto),
+        "ganadora": bool(resultado_neto >= 0),
         "direccion": direccion
     })
 

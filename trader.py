@@ -132,8 +132,8 @@ def procesar_par(cliente, par: str, vela_5m, vela_actual, vela_previa):
         pos        = dict(stats.posiciones[par])
         saldo      = stats.sesion["saldo"]
 
-    precio = vela_actual["close"]
-    rsi    = vela_actual["rsi"]
+    precio = float(vela_actual["close"])
+    rsi    = float(vela_actual["rsi"])
     tend   = "📈 Alcista" if vela_5m["ema_r"] > vela_5m["ema_l"] else "📉 Bajista"
 
     with stats.lock:
